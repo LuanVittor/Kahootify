@@ -1,11 +1,11 @@
 // GÊNEROS FUNCIONANDO
 const genres = [
-  "blues",
-  "chill",
+  // "blues",
+  // "chill",
   "classical",
   "country",
   "funk",
-  "holidays",
+  // "holidays",
   "jazz",
   "latin",
   "metal",
@@ -25,10 +25,11 @@ startButton.addEventListener('click', startGame);
 const frontPage = document.getElementById('front-page');
 const gamePage = document.getElementById('game-page');
 const answersDiv = document.querySelectorAll('.answer');
-const audioTag = document.querySelector('audio source');
+const audioTag = document.querySelector('audio');
 const genresContainer = document.querySelector('#genres-container');
+const pointsViewer = document.getElementById('point-viewer');
 
-let finalPoint = 0;
+// let finalPoint = 0;
 
 let token;
 
@@ -82,14 +83,24 @@ const getPoints = async () => {
   }, 1000);
   return points;
 }
+// continuacao para calcular de forma dinamica
+// async function sumPoints(trueOrFalse) {
+//   let finalPoint = 0
+//   if (trueOrFalse === true) {
+//     finalPoint += await getPoints();
+//     return pointsViewer.innerHTML = finalPoint;
+//   }
+//   return pointsViewer.innerHTML = finalPoint;
+// }
 
 // funcao para somar pontos
 function sumPoints(trueOrFalse) {
+  let finalPoint = 0
   if (trueOrFalse === true) {
-    finalPoint += getPoints();
-    return finalPoint;
+    finalPoint += 500;
+    return pointsViewer.innerHTML = finalPoint;
   }
-  return finalPoint;
+  return pointsViewer.innerHTML = finalPoint;
 }
 
 // Token de acesso à API
@@ -130,7 +141,8 @@ async function loadGenres() {
     const genre = await getGenre(genres[i]);
     const div = document.createElement('div');
     div.className = 'genre';
-    if (i === 10) div.classList.add('selected');
+    if (i === 7
+    ) div.classList.add('selected');
     div.id = genre.id;
     div.addEventListener('click', selectGenre)
     const img = document.createElement('img');
@@ -156,27 +168,21 @@ async function getGenrePlaylists(id) {
 // Pegando as tracks de uma playlist
 async function getPlaylistTracks(id) {
   const headers = getHeaders();
-
   const response = await fetch(`${BASE_URL}/playlists/${id}/tracks`, {
     headers
   });
-
   const data = await response.json();
-
   return data.items;
 }
 
 // GET https://api.spotify.com/v1/artists/{id}/related-artists
 async function getRelatedArtist(id) {
   const headers = getHeaders();
-
   const response = await fetch(`${BASE_URL}/artists/${id}/related-artists`, {
     headers
   });
-
   const data = await response.json();
-
-  return data.items;
+  return data.artists;
 }
 
 // Pega o url do preview de cada track
@@ -186,7 +192,17 @@ async function getTrackUrl(trackId) {
     headers
   });
   const data = await response.json();
-  return data.preview_url;
+  return data.preview_url; //{ id: trackId, url: data.preview_url };
+}
+
+// Pega o Artista da track
+async function getTrackArtistImg(trackId) {
+  const headers = getHeaders();
+  const response = await fetch(`${BASE_URL}/tracks/${trackId}`, {
+    headers
+  });
+  const data = await response.json();
+  return data.album.images[0].url;
 }
 
 // Seleciona aleatoriamente uma playlist
@@ -195,20 +211,35 @@ function selectRandomPlaylist(list) {
   return list[randomNum];
 }
 
-function buildQuestionObj(songId) {
-  return {
-    songURL: '',
-    artist1: '',
-    artist2: '',
-    artist3: '',
-    artist4: '',
-  }
+async function getArtistId(trackId) {
+  const headers = getHeaders();
+  const response = await fetch(`${BASE_URL}/tracks/${trackId}`, {
+    headers
+  });
+  const data = await response.json();
+  return data.album.artists[0].id;
 }
 
-function buildGameQuestions(selectedSongs) {
-  selectedSongs.forEach(song => {
+async function buildQuestionObj(url, id) {
+  const artistId = await getArtistId(id);
+  const relatedArtists = await getRelatedArtist(artistId);
+  const questionObj = {
+    songURL: url,
+    artist1: await getTrackArtistImg(id),
+    artist3: relatedArtists[1].images[0].url,
+    artist4: relatedArtists[2].images[0].url,
+    artist2: relatedArtists[0].images[0].url,
+  }
+  return questionObj;
+}
 
-  })
+async function buildGameQuestions(songs, ids) {
+  const arrQuestionsObjs = [];
+  for (let index = 0; index < songs.length; index++) {
+    const obj = await buildQuestionObj(songs[index], ids[index]);
+    arrQuestionsObjs.push(obj);
+  }
+  return arrQuestionsObjs;
 }
 
 async function buildTrackList() {
@@ -229,6 +260,19 @@ async function selectRandomSongs(songs, number) {
   return shuffledSongs.slice(0, number);
 }
 
+// // Seleciona as músicas aleatoriamente
+// async function selectRandomSongs(songs, number) {
+//   // Transformando músicas em array de promessas
+//   const filteredListPromises = songs.map(song => getTrackUrl(song.track.id));
+//   // Resolvendo as promessas e Filtrando pq nem todas as músicas tem preview
+//   const filteredList = (await Promise.all(filteredListPromises)).filter(song => song.url);
+//   // Embaralha a lista
+//   const shuffledSongs = filteredList.sort(() => 0.5 - Math.random());
+//   // Retorna os primeiros NUMBER dessa lista 
+//   return shuffledSongs.slice(0, number);
+// }
+
+
 // funcao que a inicia o jogo
 async function startGame() {
   frontPage.style.display = 'none';
@@ -244,14 +288,15 @@ async function startGame() {
     idsList.push(selectedList[i].track.id);
     urlsList.push(songUrl);
   };
+  const questionsObjs = await buildGameQuestions(urlsList, idsList);
+  console.log(questionsObjs);
   console.log(urlsList);
   console.log(idsList);
+  audioTag.src = urlsList[0];
+  audioTag.volume = .2;
 }
 
-
-
 window.onload = async () => {
-  getPoints()
   await getToken();
   await loadGenres();
 }
