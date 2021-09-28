@@ -7,17 +7,82 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Song search</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@1,300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap" rel="stylesheet">
+  <script src="./script.js" defer></script>
 </head>
 
 <body>
-  <input type="text">
-  <button>Search</button>
-
-  <div>
-    <audio src="" type="audio/x-m4a" controls autoplay></audio>
+  <!-- Pagina inicial do jogo onde a pessoa vai selecionar o genero muscial. -->
+  <div id="front-page">
+    <header>
+      <section id="title">
+        <h1>Bem vindo ao Kahootify</h1>
+        <h1>Selecione seu genero musical favorito!</h1>
+      </section>
+    </header>
+    <main>
+      <section>
+        <div class="genres">
+          <!-- section onde vamos adicionar os generos retornados pela API -->
+          <div id="genres-container">
+            <!-- TÁ FEITO -->
+          </div>
+        </div>
+      </section>
+      <div id="btn-div" for="">
+        <h5>Iniciar</h5>
+        <button id="start-button"></button>
+        <h5>Kahootify</h5>
+      </div>
+    </main>
+  </div>
+  <!-- aqui vai a pag do game onde o user vai jogar => selecionar a opção de acordo com o som -->
+  <div id="game-page">
+    <header>Kahootify</header>
+    <main>
+      <section class="title">Quem está cantando essa música?</section>
+      <section class="game-info">
+        <div class="question-number">5</div>
+        <div class="question-audio">
+          <audio controls autoplay volume=".5">
+            <source src="" type="audio/mpeg">
+          </audio>
+        </div>
+        <div class="points-container">Pontos</div>
+      </section>
+      <section id="answers">
+        <div id="answer1" class="answer">
+          <div id="triangle"></div>
+          <img id="img-trg" src="https://i.scdn.co/image/ab67616d0000b2732277d1a849a63c7075ec38ff" alt="">
+        </div>
+        <div id="answer2" class="answer">
+          <div id="square"></div>
+          <img id="img-sqr"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRR0sZ2F52JTlE8bf20tC-KBeVmoAHjs9g3g&usqp=CAU"
+            alt="">
+        </div>
+        <div id="answer3" class="answer">
+          <div id="circle"></div>
+          <img id="img-circle"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4YYR5oiwp79yTrt2wJ1-9DZqMLApvwK-Gfw&usqp=CAU"
+            alt="">
+        </div>
+        <div id="answer4" class="answer">
+          <div id="diamond"></div>
+          <img id="diamond-img"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRo-vypNq3GuwzpZ-dLIGkBtyUkJkJqUxuU9g&usqp=CAU"
+            alt="">
+        </div>
+      </section>
+    </main>
+    <footer></footer>
   </div>
 
-  <script src="script.js"></script>
+  <!-- possivel pagina final mostrando a pontuacao?? -->
+  <!-- <div id="final-page">
+
+  </div> -->
 </body>
 
 </html>
