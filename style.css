@@ -1,3 +1,195 @@
-div {
+:root {
+  --blueKahoot: #1368CE;
+  --redKahoot: #E21B3C;
+  --yellowKahoot: #D09F36;
+  --greenKahoot: #26890C;
+  --backgroundKahoot: #F2F2F2;
+  --cardsBackGround: #535353;
+  --cinzaEscuroSpotify: #121212;
+  --cinzaClaroSpotify: #efefef;
+  --background-noise: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc1IiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGZpbHRlcj0idXJsKCNhKSIgb3BhY2l0eT0iLjA1IiBkPSJNMCAwaDMwMHYzMDBIMHoiLz48L3N2Zz4=);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+header {
+  display: flex;
+  padding: 20px 30px;
+}
+
+body {
+  background-color: var(--backgroundKahoot);
+}
+
+#front-page {
+  display: flex;
+  flex-direction: column;
+  background-image: linear-gradient(rgba(0,0,0,.6) 0,#121212 100%),var(--background-noise); /* fundo front page spotify */
+}
+
+#title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 25px auto 15px auto;
+  font-family: 'Overpass', sans-serif;
+  font-size: 25px;
+  color: rgb(231, 231, 231);
+  text-shadow: 3px 0px 7px rgba(3, 3, 3, 0.8), 
+  -3px 0px 7px rgba(3, 3, 3, 0.8), 
+  0px 4px 7px rgba(3, 3, 3, 0.8);
+}
+
+.genres {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 65px;
+}
+
+#genres-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 1100px;
+  margin-bottom: 4px;
+}
+
+.genre {
+  background-color: #505050;
+  opacity: 0.5;
+  font-size: 25px;
+  color: rgb(243, 243, 243);
+  border-radius: 10%;
   margin: 10px;
+  padding: 10px;
+}
+
+.genre:hover {
+  opacity: 1;
+  background-color: #2c2c2c;
+  cursor: pointer;
+  font-style: italic;
+}
+
+.selected {
+  background-color: #2c2c2c;
+  font-style: italic;
+} 
+
+img {
+  height: 175px;
+  border-radius: 10%;
+}
+
+p {
+  text-align: center;
+}
+
+h5 {
+  color:rgb(219, 219, 219);
+  font-size: 30px;
+  font-family: 'Overpass', sans-serif;
+  text-shadow: 3px 0px 7px rgba(3, 3, 3, 0.8), 
+  -3px 0px 7px rgba(3, 3, 3, 0.8), 
+  0px 4px 7px rgba(3, 3, 3, 0.8);
+}
+
+#btn-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 107px;
+}
+
+/* CSS para efeito do butão https://codepen.io/b29/pen/jmNvJq?editors=1100 */
+#start-button {
+  width: 100px;
+  height: 100px;
+  background: radial-gradient( rgba(97, 184, 62, 0.8) 60%, rgb(173, 173, 173) 62%);
+  border-radius: 50%;
+  position: relative;
+  display: block;
+  margin-right: 25px;
+  margin-left: 25px;
+  box-shadow: 0px 0px 25px 3px rgba(31, 226, 31, 0.8);
+  cursor: pointer;
+}
+
+#start-button::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translateX(-40%) translateY(-50%);
+  transform: translateX(-40%) translateY(-50%);
+  transform-origin: center center;
+  width: 0;
+  height: 0;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-left: 25px solid rgb(165, 165, 165);
+  z-index: 100;
+  -webkit-transition: all 400ms cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  transition: all 400ms cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+#start-button::before {
+  content: "";
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  -webkit-animation-delay: 0s;
+  animation-delay: 0s;
+  -webkit-animation: pulsate1 2s;
+  animation: pulsate1 2s;
+  -webkit-animation-direction: forwards;
+  animation-direction: forwards;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  -webkit-animation-timing-function: steps;
+  animation-timing-function: steps;
+  opacity: 1;
+  border-radius: 50%;
+  border: 5px solid rgba(36, 36, 36, 0.75);
+  top: -30%;
+  left: -30%;
+  background: rgba(198, 16, 0, 0);
+}
+
+@-webkit-keyframes pulsate1 {
+  0% {
+    -webkit-transform: scale(0.6);
+    transform: scale(0.6);
+    opacity: 1;
+    box-shadow: inset 0px 0px 25px 3px rgba(255, 255, 255, 0.75), 0px 0px 25px 10px rgba(255, 255, 255, 0.75);
+  }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    opacity: 0;
+    box-shadow: none;
+
+  }
+}
+
+@keyframes pulsate1 {
+  0% {
+    -webkit-transform: scale(0.6);
+    transform: scale(0.6);
+    opacity: 1;
+    box-shadow: inset 0px 0px 25px 3px rgba(255, 255, 255, 0.75), 0px 0px 25px 10px rgba(255, 255, 255, 0.75);
+  }
+  100% {
+    -webkit-transform: scale(1, 1);
+    transform: scale(1);
+    opacity: 0;
+    box-shadow: none;
+
+  }
 }

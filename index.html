@@ -7,17 +7,103 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Song search</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@1,300&display=swap" rel="stylesheet">
+  <script src="./script.js" defer></script>
 </head>
 
 <body>
-  <input type="text">
-  <button>Search</button>
-
-  <div>
-    <audio src="" type="audio/x-m4a" controls autoplay></audio>
+  <!-- Pagina inicial do jogo onde a pessoa vai selecionar o genero muscial. -->
+  <div id="front-page">
+    <header>
+      <section id="title">
+        <h1>Bem vindo ao Kahootify</h1>
+        <h1>Selecione seu genero musical favorito!</h1>
+      </section>
+    </header>
+    <main>
+      <section>
+        <div class="genres">
+          <!-- section onde vamos adicionar os generos retornados pela API -->
+          <div id="genres-container">
+            <div id="rock" class="genre">
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYjo7goqHLNetegJ1aYxsFHExeFLoppykYxw&usqp=CAU"
+                alt="">
+              <p>Eletro</p>
+            </div>
+            <div id="pop" class="genre">
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQdJaXpgnPllSdxIQPG5mygDDg_9tnfD77sQ&usqp=CAU"
+                alt="">
+              <p>Rock</p>
+            </div>
+            <div id="samba" class="genre">
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-j2S4Ba3ybny4CIZETYPR-ImYM_CrwpToJQ&usqp=CAU"
+                alt="">
+              <p>Eclético</p>
+            </div>
+            <div id="funk" class="genre">
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyNWGp-DcluffkEC5FGoprgzsfNhf5XBJgBg&usqp=CAU"
+                alt="">
+              <p>Blues</p>
+            </div>
+            <div id="sad" class="genre selected">
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRoFd7HXh1SHT5yXUJLjgFuHRR3OsrmUKX4iAlt45RIToXpCCLAtU9MsPvkKwC4a_lVkM&usqp=CAU"
+                alt="">
+              <p>Jazz</p>
+            </div>
+            <div id="" class="genre">
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5SdHodlMQNrq1U96DP0yEHwDCJuv65Owt_g&usqp=CAU"
+                alt="">
+              <p>Sertanejo</p>
+            </div>
+            <div id="" class="genre">
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAXxHo-Eh_e4OEXJpcfAmJH7ikUSEovh1OXQ&usqp=CAU"
+                alt="">
+              <p>Pop</p>
+            </div>
+            <div id="" class="genre">
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvFTXUIewvYU620N7yvwg2ILv1KIEgOIi8eA&usqp=CAU"
+                alt="">
+              <p>Gospel</p>
+            </div>
+            <div id="" class="genre">
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEPcqfp7c7qkmDerfetapEOJBvIcnuoKNabQ&usqp=CAU"
+                alt="">
+              <p>Hip Hop</p>
+            </div>
+            <div id="" class="genre">
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMV9zdskKeAq1_ItaqSck066UZy-eFegh0gr1tQ4w22ISwD0DTEhHeEOFrLYYstaqIz4E&usqp=CAU"
+                alt="">
+              <p>MPB</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div id="btn-div" for="">
+        <h5>Iniciar</h5>
+        <button id="start-button"></button>
+        <h5>Kahootify</h5>
+      </div>
+    </main>
   </div>
+  <!-- aqui vai a pag do game onde o user vai jogar => selecionar a opção de acordo com o som -->
+  <!-- <div id="game-page">
 
-  <script src="script.js"></script>
+  </div> -->
+
+  <!-- possivel pagina final mostrando a pontuacao?? -->
+  <!-- <div id="final-page">
+
+  </div> -->
 </body>
 
 </html>
