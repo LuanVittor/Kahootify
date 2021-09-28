@@ -1,14 +1,62 @@
+// GÊNEROS FUNCIONANDO
+const genres = [
+  "blues",
+  "chill",
+  "classical",
+  "country",
+  "funk",
+  "holidays",
+  "jazz",
+  "latin",
+  "metal",
+  "party",
+  "pop",
+  "rock",
+  "romance",
+  "soul",
+  "summer",
+]
+
 const CLIENT_ID = 'd3a1926665894c0eba61809861699489';
 const CLIENT_SECRET = '0af3490fc1914e6fb60eba886a639901';
 const BASE_URL = 'https://api.spotify.com/v1';
 const startButton = document.getElementById('start-button');
 startButton.addEventListener('click', startGame);
 const frontPage = document.getElementById('front-page');
-const allCard = document.querySelectorAll('.genre')
+const gamePage = document.getElementById('game-page');
+const answersDiv = document.querySelectorAll('.answer');
+const audioTag = document.querySelector('audio source');
+const genresContainer = document.querySelector('#genres-container');
+
 let finalPoint = 0;
 
 let token;
 
+// Colocando evento nas Divs de respostas
+// const gotSelected = (event) => {
+// answersDiv.forEach((div) => div.classList.remove('selected-div'));
+// event.target.classList.add('selected-div');
+// }
+
+// answersDiv.forEach((div) => div.addEventListener('click', gotSelected));
+
+// funcao q pegao elemento que tiver a classe dada como parametro ou o mais proximo
+function getElementOrClosest(event, className) {
+  if (event.classList.contains(className)) {
+    return event;
+  }
+  return event.closest(`.${className}`);
+}
+
+// funcao onde adiciono a classe select e remove dos antigos
+function selectGenre({ target }) {
+  const section = getElementOrClosest(target, 'genre');
+  const removeClass = document.querySelector('.selected');
+  removeClass.classList.remove('selected');
+  section.classList.add('selected');
+}
+
+// Cabeçalho das opções para as chamadas da API
 function getHeaders() {
   const headers = new Headers({
     'Authorization': `Bearer ${token}`,
@@ -20,18 +68,6 @@ function getHeaders() {
 function getOption() {
   const selectedGenre = document.querySelector('.selected').id;
   return selectedGenre;
-}
-
-// Seleciona aleatoriamente uma playlist
-function selectRandomPlaylist(list) {
-  const randomNum = Math.floor(Math.random() * (list.length - 1)) + 1;
-  return list[randomNum];
-}
-
-// Embaralha e seleciona as primeiras músicas
-function selectRandomSongs(songs, number) {
-  const shuffledSongs = songs.sort(() => 0.5 - Math.random());
-  return shuffledSongs.slice(0, number);
 }
 
 // funcao que calcula os pontos de forma assincrona
@@ -56,6 +92,7 @@ function sumPoints(trueOrFalse) {
   return finalPoint;
 }
 
+// Token de acesso à API
 async function getToken() {
   const idAndSecret = `${CLIENT_ID}:${CLIENT_SECRET}`;
   const authorizationHeader = `Basic ${btoa(idAndSecret)}`
@@ -77,17 +114,46 @@ async function getToken() {
   return token;
 }
 
-async function getGenrePlaylists(id) {
+// Pegar dados de cada gênero
+async function getGenre(genre) {
   const headers = getHeaders();
-
-  const response = await fetch(`${BASE_URL}/browse/categories/${id}/playlists`, {
+  const response = await fetch(`${BASE_URL}/browse/categories/${genre}`, {
     headers
   });
-
   const data = await response.json();
   return data;
 }
 
+// Carrega os gêneros
+async function loadGenres() {
+  for (let i = 0; i < genres.length; i += 1) {
+    const genre = await getGenre(genres[i]);
+    const div = document.createElement('div');
+    div.className = 'genre';
+    if (i === 10) div.classList.add('selected');
+    div.id = genre.id;
+    div.addEventListener('click', selectGenre)
+    const img = document.createElement('img');
+    img.src = genre.icons[0].url;
+    const p = document.createElement('p');
+    p.innerHTML = genre.name;
+    div.append(img);
+    div.append(p);
+    genresContainer.appendChild(div);
+  }
+}
+
+// Pegando playlists do gênero selecionado
+async function getGenrePlaylists(id) {
+  const headers = getHeaders();
+  const response = await fetch(`${BASE_URL}/browse/categories/${id}/playlists`, {
+    headers
+  });
+  const data = await response.json();
+  return data;
+}
+
+// Pegando as tracks de uma playlist
 async function getPlaylistTracks(id) {
   const headers = getHeaders();
 
@@ -101,144 +167,91 @@ async function getPlaylistTracks(id) {
 }
 
 // GET https://api.spotify.com/v1/artists/{id}/related-artists
+async function getRelatedArtist(id) {
+  const headers = getHeaders();
 
-// funcao que a inicia o jogo
-async function startGame() {
-  frontPage.style.display = 'none'
-  // aqui vai continuar chamando as funcoes para gerar a pagina do game de acordo com o genero musical selecionado
+  const response = await fetch(`${BASE_URL}/artists/${id}/related-artists`, {
+    headers
+  });
+
+  const data = await response.json();
+
+  return data.items;
+}
+
+// Pega o url do preview de cada track
+async function getTrackUrl(trackId) {
+  const headers = getHeaders();
+  const response = await fetch(`${BASE_URL}/tracks/${trackId}`, {
+    headers
+  });
+  const data = await response.json();
+  return data.preview_url;
+}
+
+// Seleciona aleatoriamente uma playlist
+function selectRandomPlaylist(list) {
+  const randomNum = Math.floor(Math.random() * (list.length - 1)) + 1;
+  return list[randomNum];
+}
+
+function buildQuestionObj(songId) {
+  return {
+    songURL: '',
+    artist1: '',
+    artist2: '',
+    artist3: '',
+    artist4: '',
+  }
+}
+
+function buildGameQuestions(selectedSongs) {
+  selectedSongs.forEach(song => {
+
+  })
+}
+
+async function buildTrackList() {
   const genre = getOption();
   const list = await getGenrePlaylists(genre);
   const playlistSelectedID = selectRandomPlaylist(list.playlists.items).id;
   const songs = await getPlaylistTracks(playlistSelectedID);
-  console.log(selectRandomSongs(songs, 5));
+  return songs;
 }
+
+// Seleciona as músicas aleatoriamente
+async function selectRandomSongs(songs, number) {
+  // Filtrando pq nem todas as músicas tem preview
+  const filteredList = songs.filter(async song => await getTrackUrl(song.track.id));
+  // Embaralha a lista
+  const shuffledSongs = filteredList.sort(() => 0.5 - Math.random());
+  // Retorna os primeiros NUMBER dessa lista 
+  return shuffledSongs.slice(0, number);
+}
+
+// funcao que a inicia o jogo
+async function startGame() {
+  frontPage.style.display = 'none';
+  gamePage.style.display = 'block';
+  // aqui vai continuar chamando as funcoes para gerar a pagina do game de acordo com o genero musical selecionado
+  const songsList = await buildTrackList();
+  const selectedList = await selectRandomSongs(songsList, 20);
+  const urlsList = [];
+  const idsList = [];
+  for (let i = 0; i < selectedList.length; i += 1) {
+    const songUrl = await getTrackUrl(selectedList[i].track.id);
+    if (!songUrl) continue;
+    idsList.push(selectedList[i].track.id);
+    urlsList.push(songUrl);
+  };
+  console.log(urlsList);
+  console.log(idsList);
+}
+
+
 
 window.onload = async () => {
   getPoints()
-  try {
-    await getToken();
-    startGame();
-  } catch (error) {
-    console.log(error)
-  }
+  await getToken();
+  await loadGenres();
 }
-
-const genres = [
-  "acoustic",
-  "afrobeat",
-  "alt-rock",
-  "alternative",
-  "ambient",
-  "anime",
-  "black-metal",
-  "bluegrass",
-  "blues",
-  "bossanova",
-  "brazil",
-  "breakbeat",
-  "british",
-  "cantopop",
-  "chicago-house",
-  "children",
-  "chill",
-  "classical",
-  "club",
-  "comedy",
-  "country",
-  "dance",
-  "dancehall",
-  "death-metal",
-  "deep-house",
-  "detroit-techno",
-  "disco",
-  "disney",
-  "drum-and-bass",
-  "dub",
-  "dubstep",
-  "edm",
-  "electro",
-  "electronic",
-  "emo",
-  "folk",
-  "forro",
-  "french",
-  "funk",
-  "garage",
-  "german",
-  "gospel",
-  "goth",
-  "grindcore",
-  "groove",
-  "grunge",
-  "guitar",
-  "happy",
-  "hard-rock",
-  "hardcore",
-  "hardstyle",
-  "heavy-metal",
-  "hip-hop",
-  "holidays",
-  "honky-tonk",
-  "house",
-  "idm",
-  "indian",
-  "indie",
-  "indie-pop",
-  "industrial",
-  "iranian",
-  "j-dance",
-  "j-idol",
-  "j-pop",
-  "j-rock",
-  "jazz",
-  "k-pop",
-  "kids",
-  "latin",
-  "latino",
-  "malay",
-  "mandopop",
-  "metal",
-  "metal-misc",
-  "metalcore",
-  "minimal-techno",
-  "movies",
-  "mpb",
-  "new-age",
-  "new-release",
-  "opera",
-  "pagode",
-  "party",
-  "philippines-opm",
-  "piano",
-  "pop",
-  "pop-film",
-  "post-dubstep",
-  "power-pop",
-  "progressive-house",
-  "psych-rock",
-  "punk",
-  "punk-rock",
-  "r-n-b",
-  "rainy-day",
-  "reggae",
-  "reggaeton",
-  "road-trip",
-  "rock",
-  "rock-n-roll",
-  "rockabilly",
-  "romance",
-  "sad",
-  "salsa",
-  "samba",
-  "sertanejo",
-  "show-tunes",
-  "singer-songwriter",
-  "ska",
-  "sleep",
-  "songwriter",
-  "soul",
-  "soundtracks",
-  "spanish",
-  "study",
-  "summer",
-]

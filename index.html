@@ -8,6 +8,7 @@
   <title>Song search</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@1,300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap" rel="stylesheet">
   <script src="./script.js" defer></script>
 </head>
 
@@ -25,66 +26,7 @@
         <div class="genres">
           <!-- section onde vamos adicionar os generos retornados pela API -->
           <div id="genres-container">
-            <div id="rock" class="genre">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYjo7goqHLNetegJ1aYxsFHExeFLoppykYxw&usqp=CAU"
-                alt="">
-              <p>Eletro</p>
-            </div>
-            <div id="pop" class="genre">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQdJaXpgnPllSdxIQPG5mygDDg_9tnfD77sQ&usqp=CAU"
-                alt="">
-              <p>Rock</p>
-            </div>
-            <div id="samba" class="genre">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-j2S4Ba3ybny4CIZETYPR-ImYM_CrwpToJQ&usqp=CAU"
-                alt="">
-              <p>Eclético</p>
-            </div>
-            <div id="funk" class="genre">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyNWGp-DcluffkEC5FGoprgzsfNhf5XBJgBg&usqp=CAU"
-                alt="">
-              <p>Blues</p>
-            </div>
-            <div id="sad" class="genre selected">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRoFd7HXh1SHT5yXUJLjgFuHRR3OsrmUKX4iAlt45RIToXpCCLAtU9MsPvkKwC4a_lVkM&usqp=CAU"
-                alt="">
-              <p>Jazz</p>
-            </div>
-            <div id="" class="genre">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5SdHodlMQNrq1U96DP0yEHwDCJuv65Owt_g&usqp=CAU"
-                alt="">
-              <p>Sertanejo</p>
-            </div>
-            <div id="" class="genre">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAXxHo-Eh_e4OEXJpcfAmJH7ikUSEovh1OXQ&usqp=CAU"
-                alt="">
-              <p>Pop</p>
-            </div>
-            <div id="" class="genre">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvFTXUIewvYU620N7yvwg2ILv1KIEgOIi8eA&usqp=CAU"
-                alt="">
-              <p>Gospel</p>
-            </div>
-            <div id="" class="genre">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEPcqfp7c7qkmDerfetapEOJBvIcnuoKNabQ&usqp=CAU"
-                alt="">
-              <p>Hip Hop</p>
-            </div>
-            <div id="" class="genre">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMV9zdskKeAq1_ItaqSck066UZy-eFegh0gr1tQ4w22ISwD0DTEhHeEOFrLYYstaqIz4E&usqp=CAU"
-                alt="">
-              <p>MPB</p>
-            </div>
+            <!-- TÁ FEITO -->
           </div>
         </div>
       </section>
@@ -96,9 +38,46 @@
     </main>
   </div>
   <!-- aqui vai a pag do game onde o user vai jogar => selecionar a opção de acordo com o som -->
-  <!-- <div id="game-page">
-
-  </div> -->
+  <div id="game-page">
+    <header>Kahootify</header>
+    <main>
+      <section class="title">Quem está cantando essa música?</section>
+      <section class="game-info">
+        <div class="question-number">5</div>
+        <div class="question-audio">
+          <audio controls autoplay volume=".5">
+            <source src="" type="audio/mpeg">
+          </audio>
+        </div>
+        <div class="points-container">Pontos</div>
+      </section>
+      <section id="answers">
+        <div id="answer1" class="answer">
+          <div id="triangle"></div>
+          <img id="img-trg" src="https://i.scdn.co/image/ab67616d0000b2732277d1a849a63c7075ec38ff" alt="">
+        </div>
+        <div id="answer2" class="answer">
+          <div id="square"></div>
+          <img id="img-sqr"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRR0sZ2F52JTlE8bf20tC-KBeVmoAHjs9g3g&usqp=CAU"
+            alt="">
+        </div>
+        <div id="answer3" class="answer">
+          <div id="circle"></div>
+          <img id="img-circle"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4YYR5oiwp79yTrt2wJ1-9DZqMLApvwK-Gfw&usqp=CAU"
+            alt="">
+        </div>
+        <div id="answer4" class="answer">
+          <div id="diamond"></div>
+          <img id="diamond-img"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRo-vypNq3GuwzpZ-dLIGkBtyUkJkJqUxuU9g&usqp=CAU"
+            alt="">
+        </div>
+      </section>
+    </main>
+    <footer></footer>
+  </div>
 
   <!-- possivel pagina final mostrando a pontuacao?? -->
   <!-- <div id="final-page">
