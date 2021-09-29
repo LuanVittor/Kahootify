@@ -14,4 +14,6 @@ Alunos:
 
 ---
 
-Projeto bônus de fim do módulo de Fundamentos sugerido pela Trybe. 
+Projeto bônus de fim do módulo de Fundamentos sugerido pela Trybe.
+
+A proposta foi acessar a API do [Spotify](https://www.spotify.com/br/) para criar um jogo de perguntas de múltipla escolha similar ao da plataforma [Kahoot](https://kahoot.com/).

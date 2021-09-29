@@ -19,8 +19,8 @@ const idLuan = '436a88a2b1f543999bc8d857b27527d7';
 const secretLuan = 'de941d2302f64257908f37257c6ebaa7'
 const idLeo = 'd3a1926665894c0eba61809861699489';
 const secretLeo = '0af3490fc1914e6fb60eba886a639901';
-const CLIENT_ID = idLeo;
-const CLIENT_SECRET = secretLeo;
+const CLIENT_ID = idLuan;
+const CLIENT_SECRET = secretLuan;
 const BASE_URL = 'https://api.spotify.com/v1';
 const startButton = document.getElementById('start-button');
 startButton.addEventListener('click', startGame);
@@ -303,7 +303,7 @@ async function checkAnswers(event) {
 
 function createAlert() {
   const div = document.createElement('div');
-  div.className = 'alert alert-success';
+  div.className = 'alert alert-success end-game';
   div.setAttribute('role', 'alert');
 
   const h4 = document.createElement('h4');
@@ -311,7 +311,29 @@ function createAlert() {
   h4.id = 'title-text';
 
   const p1 = document.createElement('p');
-  p1.id = 'title-text';
+  p1.id = 'paragraph-alert';
+  const p2 = document.createElement('p');
+  p2.id = 'another-round';
+  p2.className = 'mb-0';
+
+  div.appendChild(h4);
+  div.appendChild(p1);
+  div.appendChild(document.createElement('hr'));
+  div.appendChild(p2);
+  return div;
+}
+
+function createAlert2() {
+  const div = document.createElement('div');
+  div.className = 'alert alert-danger end-game';
+  div.setAttribute('role', 'alert');
+
+  const h4 = document.createElement('h4');
+  h4.className = 'alert-heading';
+  h4.id = 'title-text';
+
+  const p1 = document.createElement('p');
+  p1.id = 'paragraph-alert';
   const p2 = document.createElement('p');
   p2.id = 'another-round';
   p2.className = 'mb-0';
@@ -327,7 +349,9 @@ const mainGame = document.querySelector('#main-game-page');
 // ParentNode.insertBefore(<your element>, ParentNode.firstChild);
 // // Carrega música e imagens aleatoriamente
 const loadQuestions = (questions, num) => {
+  getPoints();
   if (num === 5) {
+    questionNumber.innerText = 5
     audioTag.pause();
     if (totalPoints > 0) {
       mainGame.insertBefore(createAlert(), mainGame.firstChild);
@@ -337,12 +361,25 @@ const loadQuestions = (questions, num) => {
       titleAlert.innerText = 'Parabéns!';
       paragraphAlert.innerText = `Seu total de pontos foi: ${totalPoints}`;
       anotherRound.innerText = 'Que tal mais uma rodada? Desafie seus amigos';
+      setTimeout(() => {
+        window.location.reload();
+      }, 15000)
+      
+    } else {
+      mainGame.insertBefore(createAlert2(), mainGame.firstChild);
+      const titleAlert = document.querySelector('#title-text');
+      const paragraphAlert = document.querySelector('#paragraph-alert');
+      const anotherRound = document.querySelector('#another-round');
+      titleAlert.innerText = 'Poxa Vida, você não acertou nenhuma!';
+      paragraphAlert.innerText = `Seu total de pontos foi: ${totalPoints}`;
+      anotherRound.innerText = 'Que tal mais uma rodada? Desafie seus amigos';
+      setTimeout(() => {
+        window.location.reload();
+      }, 15000)
     }
     // if (!alert(`Pontuação final: ${totalPoints}`)) {
-    // window.location.reload();
   }
-  getPoints();
-  questionNumber.innerText = num + 1;
+  if (num !== 5) questionNumber.innerText = num + 1;
   audioTag.src = questions[num].songURL;
   const random = [1, 2, 3, 4].sort(() => 0.5 - Math.random());
   for (let i = 0; i < answers.length; i += 1) {

@@ -453,6 +453,24 @@ audio {
   border-top-color: rgb(255, 255, 255);
 }
 
+.alert {
+  font-size: 35px;
+  width: 900px;
+  height: 400px;
+  border: 2px solid var(--cinzaEscuroSpotify);
+}
+
+.alert-heading {
+  font-size: 40px;
+  margin-bottom: 75px;
+  text-align: center;
+}
+
+.end-game {
+  position: fixed;
+  z-index: 99;
+}
+
 /* Tela de loading */
 
 body {
