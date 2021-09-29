@@ -17,6 +17,10 @@
   box-sizing: border-box;
 }
 
+html {
+  background-color: var(--backgroundKahoot);
+}
+
 header {
   display: flex;
   padding: 20px 30px;
@@ -201,7 +205,7 @@ h5 {
 
 #game-page {
   display: none;
-  height: 100vh;
+  height: 100%;
   width: 100vw;
   position: absolute;
   top: 0;
@@ -249,6 +253,7 @@ audio {
 .question-number {
   display: flex;
   justify-content: center;
+  align-items: center;
   background-color:#2e2a2b;
   opacity: 0.9;
   color: var(--cinzaClaroSpotify);

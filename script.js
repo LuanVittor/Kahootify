@@ -1,11 +1,11 @@
 // GÊNEROS FUNCIONANDO
 const genres = [
-  // "blues",
+  "blues",
   // "chill",
   "classical",
   "country",
   "funk",
-  // "holidays",
+  "holidays",
   "jazz",
   "latin",
   "metal",
@@ -27,6 +27,7 @@ const gamePage = document.getElementById('game-page');
 const answersDiv = document.querySelectorAll('.answer');
 const genresContainer = document.querySelector('#genres-container');
 const pointsViewer = document.getElementById('point-viewer');
+const questionNumber = document.querySelector('.question-number');
 
 const audioTag = document.querySelector('audio');
 audioTag.volume = .1;
@@ -35,8 +36,10 @@ const answer2 = document.querySelector('#answer2');
 const answer3 = document.querySelector('#answer3');
 const answer4 = document.querySelector('#answer4');
 const answers = document.querySelectorAll('.answer');
-
-// let finalPoint = 0;
+let qNum = 0;
+let questionsList;
+let correctAnswer;
+let points = 0;
 
 let token;
 
@@ -56,20 +59,19 @@ function getElementOrClosest(event, className) {
   return event.closest(`.${className}`);
 }
 
+function getAnswerDiv({ target }) {
+  if (target.nodeName === 'DIV') {
+    return target;
+  }
+  return target.closest(`div`);
+}
+
 // funcao onde adiciono a classe select e remove dos antigos
 function selectGenre({ target }) {
   const section = getElementOrClosest(target, 'genre');
   const removeClass = document.querySelector('.selected');
   removeClass.classList.remove('selected');
   section.classList.add('selected');
-}
-
-// Cabeçalho das opções para as chamadas da API
-function getHeaders() {
-  const headers = new Headers({
-    'Authorization': `Bearer ${token}`,
-  })
-  return headers;
 }
 
 // Verifica seleção da página inicial para iniciar o jogo
@@ -86,7 +88,7 @@ const getPoints = async () => {
     if (points <= 500) {
       points = 500;
       return points;
-    } else if ( /*quando for feito a escolha da musica */ luan === lindo) {
+    } else if ( /*quando for feito a escolha da musica */ true) {
       return points;
     }
   }, 1000);
@@ -109,6 +111,15 @@ function sumPoints(trueOrFalse) {
     return pointsViewer.innerHTML = finalPoint;
   }
   return pointsViewer.innerHTML = finalPoint;
+}
+
+//#region  Acessos à API
+// Cabeçalho das opções para as chamadas da API
+function getHeaders() {
+  const headers = new Headers({
+    'Authorization': `Bearer ${token}`,
+  })
+  return headers;
 }
 
 // Token de acesso à API
@@ -143,25 +154,6 @@ async function getGenre(genre) {
   return data;
 }
 
-// Carrega os gêneros
-async function loadGenres() {
-  for (let i = 0; i < genres.length; i += 1) {
-    const genre = await getGenre(genres[i]);
-    const div = document.createElement('div');
-    div.className = 'genre';
-    if (i === 7
-    ) div.classList.add('selected');
-    div.id = genre.id;
-    div.addEventListener('click', selectGenre)
-    const img = document.createElement('img');
-    img.src = genre.icons[0].url;
-    const p = document.createElement('p');
-    p.innerHTML = genre.name;
-    div.append(img);
-    div.append(p);
-    genresContainer.appendChild(div);
-  }
-}
 
 // Pegando playlists do gênero selecionado
 async function getGenrePlaylists(id) {
@@ -213,12 +205,6 @@ async function getTrackArtistImg(trackId) {
   return { name: data.album.artists[0].name, url: data.album.images[0].url };//retornando o nome junto com a imagem.
 }
 
-// Seleciona aleatoriamente uma playlist
-function selectRandomPlaylist(list) {
-  const randomNum = Math.floor(Math.random() * (list.length - 1)) + 1;
-  return list[randomNum];
-}
-
 async function getArtistId(trackId) {
   const headers = getHeaders();
   const response = await fetch(`${BASE_URL}/tracks/${trackId}`, {
@@ -227,17 +213,49 @@ async function getArtistId(trackId) {
   const data = await response.json();
   return data.album.artists[0].id;
 }
+//#endregion
+
+// Seleciona aleatoriamente uma playlist
+function selectRandomPlaylist(list) {
+  const randomNum = Math.floor(Math.random() * (list.length - 1)) + 1;
+  return list[randomNum];
+}
+
+// Carrega os gêneros na página inicial
+async function loadGenres() {
+  for (let i = 0; i < genres.length; i += 1) {
+    const genre = await getGenre(genres[i]);
+    const div = document.createElement('div');
+    div.className = 'genre';
+    if (i === 7
+    ) div.classList.add('selected');
+    div.id = genre.id;
+    div.addEventListener('click', selectGenre)
+    const img = document.createElement('img');
+    img.src = genre.icons[0].url;
+    const p = document.createElement('p');
+    p.innerHTML = genre.name;
+    div.append(img);
+    div.append(p);
+    genresContainer.appendChild(div);
+  }
+}
+
+// https://api.spotify.com/v1/search?query=rock&type=playlist&offset=0&limit=50"
 
 async function buildQuestionObj(url, id) {
   const artistId = await getArtistId(id);
   const relatedArtists = await getRelatedArtist(artistId);
+  const fiteredRelArtists = relatedArtists.filter(artist => artist.name && artist.images.length !== 0);
+  console.log('Lista de artistas relacionados: ',relatedArtists);
+  console.log('Lista filtrada de artistas relacionados: ',fiteredRelArtists);
   const questionObj = {
     songURL: url,
     artist1: { ...await getTrackArtistImg(id), isRightAnswer: true },//indicador de resposta certa
     //retornando nome junto com imagem
-    artist3: { name: relatedArtists[1].name, url: relatedArtists[1].images[0].url },
-    artist4: { name: relatedArtists[2].name, url: relatedArtists[2].images[0].url },
-    artist2: { name: relatedArtists[3].name, url: relatedArtists[3].images[0].url },
+    artist3: { name: fiteredRelArtists[1].name, url: fiteredRelArtists[1].images[0].url },
+    artist4: { name: fiteredRelArtists[2].name, url: fiteredRelArtists[2].images[0].url },
+    artist2: { name: fiteredRelArtists[3].name, url: fiteredRelArtists[3].images[0].url },
   }
   return questionObj;
 }
@@ -247,7 +265,9 @@ async function buildGameQuestions(songs, ids) {
   for (let index = 0; index < songs.length; index++) {
     const obj = await buildQuestionObj(songs[index], ids[index]);
     arrQuestionsObjs.push(obj);
+    if (arrQuestionsObjs.length === 5) break;
   }
+  questionsList = arrQuestionsObjs;
   return arrQuestionsObjs;
 }
 
@@ -281,26 +301,58 @@ async function selectRandomSongs(songs, number) {
 //   return shuffledSongs.slice(0, number);
 // }
 
-function checkAnswers({ target }) {
-  if (target.classList.contains('right-answer')) {
-    //oque fazer com a resposta certa?? qual proximo passo é??
-            
+function updatePoints(isRight) {
+  if(isRight) {
+    points += 200;
+    pointsViewer.innerHTML = points;
+  } else {
+    points -= 100;
+    pointsViewer.innerHTML = points;
+  }
+}
+
+// Evento do click nas respostas
+async function checkAnswers(event) {
+  const answer = getAnswerDiv(event);
+  answers.forEach(answer => {
+    if (answer.querySelector('span').innerText === questionsList[qNum].artist1.name) {
+      correctAnswer = answer;
+    }
+  });
+  const answerName = answer.querySelector('span').innerText;
+  if (answerName === questionsList[qNum].artist1.name) {
+    qNum += 1;
+    answer.style.border = '5px solid #00D18B';
+    setTimeout(() => {
+      loadQuestions(questionsList, qNum);
+      updatePoints(true);
+      answer.style.border = '';
+    }, 1500);
+  } else {
+    qNum += 1;
+    answer.style.border = '5px solid #CC0000';
+    correctAnswer.style.border = '5px solid #00D18B';
+    setTimeout(() => {
+      loadQuestions(questionsList, qNum);
+      updatePoints(false);
+      answer.style.borderColor = '';
+      correctAnswer.style.border = '';
+    }, 1500);
   }
 }
 
 // Carrega música e imagens aleatoriamente
 const loadQuestions = (questions, num) => {
+  questionNumber.innerText = num + 1;
   audioTag.src = questions[num].songURL;
   const random = [1, 2, 3, 4].sort(() => 0.5 - Math.random());
   for (let i = 0; i < answers.length; i += 1) {
     const artist = questions[num][`artist${random[i]}`];
     answers[i].querySelector('img').src = artist.url;
     answers[i].querySelector('span').innerHTML = artist.name;//preenchendo o span com o nome
-    if (artist.isRightAnswer) { //isRightAnswer é para saber se a resposta esta correta 
-      artist.classList.add('right-answer');
-    }
     answers[i].addEventListener('click', checkAnswers);
   }
+  answers.forEach(answer => answer.classList.remove('selected-answer'));
 }
 
 // funcao que a inicia o jogo
@@ -309,7 +361,7 @@ async function startGame() {
   gamePage.style.display = 'block';
   mkLoadpg()
   setTimeout(() => {
-  let div = document.getElementById('load');
+    let div = document.getElementById('load');
     div.remove()
   }, 2000);
   // aqui vai continuar chamando as funcoes para gerar a pagina do game de acordo com o genero musical selecionado
@@ -324,11 +376,7 @@ async function startGame() {
     urlsList.push(songUrl);
   };
   const questionsObjs = await buildGameQuestions(urlsList, idsList);
-  loadQuestions(questionsObjs, 0);
-
-  console.log(questionsObjs);
-  console.log(urlsList);
-  console.log(idsList);
+  loadQuestions(questionsObjs, qNum);
 }
 
 function mkLoadpg() {
