@@ -26,6 +26,39 @@ header {
   padding: 20px 30px;
 }
 
+#display-btn {
+  align-self: center;
+  margin-top: 10px;
+}
+
+#myInput {
+  color: var(--cinzaEscuroSpotify);
+}
+
+.bi-controller {
+  color: var(--cinzaEscuroSpotify);
+}
+
+.modal-title {
+  margin-left: 15px;
+  color: var(--greenSpotify);
+  text-shadow: none;
+  font-weight: bold;
+  font-family: 'Gideon Roman', cursive;
+}
+
+.modal-body {
+  color: var(--cinzaEscuroSpotify);
+  text-shadow: none;
+  font-size: 25px;
+  font-weight: bold;
+  font-family: 'Gideon Roman', cursive;
+}
+
+#fill-btn {
+  border: 3px solid var(--greenSpotify);
+}
+
 body {
   background-color: var(--backgroundKahoot);
 }
@@ -166,8 +199,8 @@ h5 {
   opacity: 1;
   border-radius: 50%;
   border: 5px solid rgba(36, 36, 36, 0.75);
-  top: -30%;
-  left: -30%;
+  top: -25%;
+  left: -25%;
   background: rgba(198, 16, 0, 0);
 }
 
@@ -234,10 +267,6 @@ h5 {
 .question-audio {
   border-radius: 2%;
   background-color: #2e2a2b;
-}
-
-#display-btn {
-  align-self: flex-end;
 }
 
 .title {
@@ -435,7 +464,7 @@ body {
   width:600px;
   height:36px;
   left:50%;
-  top:40%;
+  top:23%;
   margin-left:-300px;
   overflow:visible;
   -webkit-user-select:none;
@@ -459,7 +488,8 @@ body {
   -o-transform:rotate(180deg);
   -moz-transform:rotate(180deg);
   -webkit-transform:rotate(180deg);
-  color:#35C4F0;
+  /* color:#35C4F0; */
+  color: var(--cinzaEscuroSpotify);
 }
 
 #load div:nth-child(2) {

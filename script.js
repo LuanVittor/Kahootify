@@ -1,24 +1,26 @@
 // GÊNEROS FUNCIONANDO
 const genres = [
+  "pop",
+  "party",
+  "rock",
+  "latin",
+  "romance",
   "blues",
-  // "chill",
   "classical",
+  "metal",
   "country",
   "funk",
-  "holidays",
+  // "holidays",
   "jazz",
-  "latin",
-  "metal",
-  "party",
-  "pop",
-  "rock",
-  "romance",
   "soul",
-  "summer",
+  // "summer",
 ]
-
-const CLIENT_ID = 'd3a1926665894c0eba61809861699489';
-const CLIENT_SECRET = '0af3490fc1914e6fb60eba886a639901';
+const idLuan = '436a88a2b1f543999bc8d857b27527d7';
+const secretLuan = 'de941d2302f64257908f37257c6ebaa7'
+const idLeo = 'd3a1926665894c0eba61809861699489';
+const secretLeo = '0af3490fc1914e6fb60eba886a639901';
+const CLIENT_ID = idLeo;
+const CLIENT_SECRET = secretLeo;
 const BASE_URL = 'https://api.spotify.com/v1';
 const startButton = document.getElementById('start-button');
 startButton.addEventListener('click', startGame);
@@ -39,17 +41,10 @@ const answers = document.querySelectorAll('.answer');
 let qNum = 0;
 let questionsList;
 let correctAnswer;
+let totalPoints = 0;
 let points = 0;
-
+let clicked = false;
 let token;
-
-// Colocando evento nas Divs de respostas
-// const gotSelected = (event) => {
-// answersDiv.forEach((div) => div.classList.remove('selected-div'));
-// event.target.classList.add('selected-div');
-// }
-
-// answersDiv.forEach((div) => div.addEventListener('click', gotSelected));
 
 // funcao q pegao elemento que tiver a classe dada como parametro ou o mais proximo
 function getElementOrClosest(event, className) {
@@ -78,39 +73,6 @@ function selectGenre({ target }) {
 function getOption() {
   const selectedGenre = document.querySelector('.selected').id;
   return selectedGenre;
-}
-
-// funcao que calcula os pontos de forma assincrona
-const getPoints = async () => {
-  let points = 3000;
-  const interval = setInterval(() => {
-    points -= Math.floor(Math.random() * 50) + 51;
-    if (points <= 500) {
-      points = 500;
-      return points;
-    } else if ( /*quando for feito a escolha da musica */ true) {
-      return points;
-    }
-  }, 1000);
-}
-// continuacao para calcular de forma dinamica
-// async function sumPoints(trueOrFalse) {
-//   let finalPoint = 0
-//   if (trueOrFalse === true) {
-//     finalPoint += await getPoints();
-//     return pointsViewer.innerHTML = finalPoint;
-//   }
-//   return pointsViewer.innerHTML = finalPoint;
-// }
-
-// funcao para somar pontos
-function sumPoints(trueOrFalse) {
-  let finalPoint = 0
-  if (trueOrFalse === true) {
-    finalPoint += 500;
-    return pointsViewer.innerHTML = finalPoint;
-  }
-  return pointsViewer.innerHTML = finalPoint;
 }
 
 //#region  Acessos à API
@@ -227,7 +189,7 @@ async function loadGenres() {
     const genre = await getGenre(genres[i]);
     const div = document.createElement('div');
     div.className = 'genre';
-    if (i === 7
+    if (i === 0
     ) div.classList.add('selected');
     div.id = genre.id;
     div.addEventListener('click', selectGenre)
@@ -287,44 +249,48 @@ async function selectRandomSongs(songs, number) {
   return shuffledSongs.slice(0, number);
 }
 
-// // Seleciona as músicas aleatoriamente
-// async function selectRandomSongs(songs, number) {
-//   // Transformando músicas em array de promessas
-//   const filteredListPromises = songs.map(song => getTrackUrl(song.track.id));
-//   // Resolvendo as promessas e Filtrando pq nem todas as músicas tem preview
-//   const filteredList = (await Promise.all(filteredListPromises)).filter(song => song.url);
-//   // Embaralha a lista
-//   const shuffledSongs = filteredList.sort(() => 0.5 - Math.random());
-//   // Retorna os primeiros NUMBER dessa lista 
-//   return shuffledSongs.slice(0, number);
-// }
+// funcao que calcula os pontos com base no te
+const getPoints = async () => {
+  points = 3000;
+  const interval = setInterval(() => {
+    points -= Math.floor(Math.random() * 50) + 51;
+    if (points <= 500) {
+      points = 500;
+      return points;
+    } else if (clicked) {
+      clicked = false
+      return points;
+    }
+  }, 1000);
+}
 
 function showAnswerAndLoadNext(answerName, answerDiv) {
   if (answerName === questionsList[qNum].artist1.name) {
     qNum += 1;
-    answerDiv.style.border = '5px solid #00D18B';
-    points += 200;
-    pointsViewer.innerHTML = points;
+    totalPoints += points;
+    answerDiv.style.border = '7px solid #00D18B';
+    pointsViewer.innerHTML = totalPoints;
     setTimeout(() => {
       loadQuestions(questionsList, qNum);
       answerDiv.style.border = '';
-    }, 1500);
+    }, 2000);
   } else {
     qNum += 1;
-    answerDiv.style.border = '5px solid #CC0000';
-    correctAnswer.style.border = '5px solid #00D18B';
-    points -= 100;
-    pointsViewer.innerHTML = points;
+    totalPoints += 0;
+    answerDiv.style.border = '7px solid #CC0000';
+    correctAnswer.style.border = '7px solid #00D18B';
+    pointsViewer.innerHTML = totalPoints;
     setTimeout(() => {
       loadQuestions(questionsList, qNum);
       answerDiv.style.borderColor = '';
       correctAnswer.style.border = '';
-    }, 1500);
+    }, 2000);
   }
 }
 
 // Evento do click nas respostas
 async function checkAnswers(event) {
+  clicked = true;
   const answer = getAnswerDiv(event);
   answers.forEach(answer => {
     if (answer.querySelector('span').innerText === questionsList[qNum].artist1.name) {
@@ -333,16 +299,49 @@ async function checkAnswers(event) {
   });
   const answerName = answer.querySelector('span').innerText;
   showAnswerAndLoadNext(answerName, answer);
-  
 }
 
-// Carrega música e imagens aleatoriamente
+function createAlert() {
+  const div = document.createElement('div');
+  div.className = 'alert alert-success';
+  div.setAttribute('role', 'alert');
+
+  const h4 = document.createElement('h4');
+  h4.className = 'alert-heading';
+  h4.id = 'title-text';
+
+  const p1 = document.createElement('p');
+  p1.id = 'title-text';
+  const p2 = document.createElement('p');
+  p2.id = 'another-round';
+  p2.className = 'mb-0';
+
+  div.appendChild(h4);
+  div.appendChild(p1);
+  div.appendChild(document.createElement('hr'));
+  div.appendChild(p2);
+  return div;
+}
+
+const mainGame = document.querySelector('#main-game-page');
+// ParentNode.insertBefore(<your element>, ParentNode.firstChild);
+// // Carrega música e imagens aleatoriamente
 const loadQuestions = (questions, num) => {
   if (num === 5) {
-    if (!alert(`Pontuação final: ${points}`)){
-      window.location.reload();
+    audioTag.pause();
+    if (totalPoints > 0) {
+      mainGame.insertBefore(createAlert(), mainGame.firstChild);
+      const titleAlert = document.querySelector('#title-text');
+      const paragraphAlert = document.querySelector('#paragraph-alert');
+      const anotherRound = document.querySelector('#another-round');
+      titleAlert.innerText = 'Parabéns!';
+      paragraphAlert.innerText = `Seu total de pontos foi: ${totalPoints}`;
+      anotherRound.innerText = 'Que tal mais uma rodada? Desafie seus amigos';
     }
-  };
+    // if (!alert(`Pontuação final: ${totalPoints}`)) {
+    // window.location.reload();
+  }
+  getPoints();
   questionNumber.innerText = num + 1;
   audioTag.src = questions[num].songURL;
   const random = [1, 2, 3, 4].sort(() => 0.5 - Math.random());
