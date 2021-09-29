@@ -247,8 +247,6 @@ async function buildQuestionObj(url, id) {
   const artistId = await getArtistId(id);
   const relatedArtists = await getRelatedArtist(artistId);
   const fiteredRelArtists = relatedArtists.filter(artist => artist.name && artist.images.length !== 0);
-  // console.log('Lista de artistas relacionados: ',relatedArtists);
-  // console.log('Lista filtrada de artistas relacionados: ',fiteredRelArtists);
   const questionObj = {
     songURL: url,
     artist1: { ...await getTrackArtistImg(id), isRightAnswer: true },//indicador de resposta certa
