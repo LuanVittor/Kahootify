@@ -5,10 +5,18 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Song search</title>
+  <title>Kahootify</title>
+  <link rel="icon" href="/kahootify.png">
+  <!-- leo precisa salva a imagem pelo pc dele para poder colcoar icone -->
+  <!-- BootStrap link -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@1,300&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@900&family=Courgette&family=Kalam:wght@700&display=swap"
+    rel="stylesheet">
   <script src="./script.js" defer></script>
 </head>
 
@@ -39,13 +47,46 @@
   </div>
   <!-- aqui vai a pag do game onde o user vai jogar => selecionar a opção de acordo com o som -->
   <div id="game-page">
-    <header>Kahootify</header>
+    <header id="header" class="fs-1 shadow-sm p-3 mb-5 bg-body rounded">Kahootify</header>
     <main>
+      <!-- testando modal -->
+      <div id="display-btn">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          Como Jogar!
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Seja Bem vinda(o)!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                O Kahootify consiste em um jogo de adivinhação, você escuta muitas músicas? É o que veremos, pois para
+                vencer é preciso adivinhar o maior número de músicas possíveis no menor tempo! Acerte clicando nas
+                opções mostradas abaixo na página! Boa sorte e ótima diversão!
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- fim do teste -->
       <section class="title">Quem está cantando essa música?</section>
       <section class="game-info">
         <div class="question-number">5</div>
-        <div class="question-audio">
-          <audio src="" type="audio/mpeg" controls autoplay>
+        <div class="question-audio card border border-4 border-dark" style="width: 18rem">
+          <img id="teste"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQF6GtEeIqRe1DskFWhZdx7ER8YVTBPVSC8iw&usqp=CAU"
+            alt="" class="card-img-top">
+          <div class="card-body">
+            <audio class="card-text" src="" type="audio/mpeg" controls autoplay>
+          </div>
         </div>
         <div class="points-container">
           <label for="">Pontos:</label>
@@ -55,35 +96,39 @@
       <section id="answers">
         <div id="answer1" class="answer">
           <div id="triangle"></div>
-          <img id="img-trg" src="https://i.scdn.co/image/ab67616d0000b2732277d1a849a63c7075ec38ff" alt="">
+          <img id="img-trg">
+          <span id="name-trg"></span>
         </div>
         <div id="answer2" class="answer">
           <div id="square"></div>
-          <img id="img-sqr"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRR0sZ2F52JTlE8bf20tC-KBeVmoAHjs9g3g&usqp=CAU"
-            alt="">
+          <img id="img-sqr">
+          <span id="name-sqr"></span>
         </div>
         <div id="answer3" class="answer">
           <div id="circle"></div>
-          <img id="img-circle"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4YYR5oiwp79yTrt2wJ1-9DZqMLApvwK-Gfw&usqp=CAU"
-            alt="">
+          <img id="img-circle">
+          <span id="name-circle"></span>
         </div>
         <div id="answer4" class="answer">
           <div id="diamond"></div>
-          <img id="diamond-img"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRo-vypNq3GuwzpZ-dLIGkBtyUkJkJqUxuU9g&usqp=CAU"
-            alt="">
+          <img id="diamond-img">
+          <span id="name-diamond"></span>
         </div>
       </section>
     </main>
-    <footer></footer>
+    <!-- tela de loading -->
+    <div id="load"></div>
   </div>
 
   <!-- possivel pagina final mostrando a pontuacao?? -->
   <!-- <div id="final-page">
 
   </div> -->
+  <!-- JS Bootstrap -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+    crossorigin="anonymous"></script>
 </body>
 
 </html>

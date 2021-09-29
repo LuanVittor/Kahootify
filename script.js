@@ -25,9 +25,16 @@ startButton.addEventListener('click', startGame);
 const frontPage = document.getElementById('front-page');
 const gamePage = document.getElementById('game-page');
 const answersDiv = document.querySelectorAll('.answer');
-const audioTag = document.querySelector('audio');
 const genresContainer = document.querySelector('#genres-container');
 const pointsViewer = document.getElementById('point-viewer');
+
+const audioTag = document.querySelector('audio');
+audioTag.volume = .1;
+const answer1 = document.querySelector('#answer1');
+const answer2 = document.querySelector('#answer2');
+const answer3 = document.querySelector('#answer3');
+const answer4 = document.querySelector('#answer4');
+const answers = document.querySelectorAll('.answer');
 
 // let finalPoint = 0;
 
@@ -76,12 +83,13 @@ const getPoints = async () => {
   let points = 3000;
   const interval = setInterval(() => {
     points -= Math.floor(Math.random() * 50) + 51;
-    if (points <= 500 /* ou quando for feito a escolha da musica */) {
+    if (points <= 500) {
       points = 500;
-      clearInterval(interval);
+      return points;
+    } else if ( /*quando for feito a escolha da musica */ luan === lindo) {
+      return points;
     }
   }, 1000);
-  return points;
 }
 // continuacao para calcular de forma dinamica
 // async function sumPoints(trueOrFalse) {
@@ -202,7 +210,7 @@ async function getTrackArtistImg(trackId) {
     headers
   });
   const data = await response.json();
-  return data.album.images[0].url;
+  return { name: data.album.artists[0].name, url: data.album.images[0].url };//retornando o nome junto com a imagem.
 }
 
 // Seleciona aleatoriamente uma playlist
@@ -225,10 +233,11 @@ async function buildQuestionObj(url, id) {
   const relatedArtists = await getRelatedArtist(artistId);
   const questionObj = {
     songURL: url,
-    artist1: await getTrackArtistImg(id),
-    artist3: relatedArtists[1].images[0].url,
-    artist4: relatedArtists[2].images[0].url,
-    artist2: relatedArtists[0].images[0].url,
+    artist1: { ...await getTrackArtistImg(id), isRightAnswer: true },//indicador de resposta certa
+    //retornando nome junto com imagem
+    artist3: { name: relatedArtists[1].name, url: relatedArtists[1].images[0].url },
+    artist4: { name: relatedArtists[2].name, url: relatedArtists[2].images[0].url },
+    artist2: { name: relatedArtists[3].name, url: relatedArtists[3].images[0].url },
   }
   return questionObj;
 }
@@ -272,11 +281,37 @@ async function selectRandomSongs(songs, number) {
 //   return shuffledSongs.slice(0, number);
 // }
 
+function checkAnswers({ target }) {
+  if (target.classList.contains('right-answer')) {
+    //oque fazer com a resposta certa?? qual proximo passo é??
+            
+  }
+}
+
+// Carrega música e imagens aleatoriamente
+const loadQuestions = (questions, num) => {
+  audioTag.src = questions[num].songURL;
+  const random = [1, 2, 3, 4].sort(() => 0.5 - Math.random());
+  for (let i = 0; i < answers.length; i += 1) {
+    const artist = questions[num][`artist${random[i]}`];
+    answers[i].querySelector('img').src = artist.url;
+    answers[i].querySelector('span').innerHTML = artist.name;//preenchendo o span com o nome
+    if (artist.isRightAnswer) { //isRightAnswer é para saber se a resposta esta correta 
+      artist.classList.add('right-answer');
+    }
+    answers[i].addEventListener('click', checkAnswers);
+  }
+}
 
 // funcao que a inicia o jogo
 async function startGame() {
   frontPage.style.display = 'none';
   gamePage.style.display = 'block';
+  mkLoadpg()
+  setTimeout(() => {
+  let div = document.getElementById('load');
+    div.remove()
+  }, 2000);
   // aqui vai continuar chamando as funcoes para gerar a pagina do game de acordo com o genero musical selecionado
   const songsList = await buildTrackList();
   const selectedList = await selectRandomSongs(songsList, 20);
@@ -289,13 +324,22 @@ async function startGame() {
     urlsList.push(songUrl);
   };
   const questionsObjs = await buildGameQuestions(urlsList, idsList);
+  loadQuestions(questionsObjs, 0);
+
   console.log(questionsObjs);
   console.log(urlsList);
   console.log(idsList);
-  audioTag.src = urlsList[0];
-  audioTag.volume = .2;
 }
 
+function mkLoadpg() {
+  let div = document.getElementById('load');
+  let loading = ['G', 'N', 'I', 'D', 'A', 'O', 'L']
+  for (let i = 0; i < loading.length; i += 1) {
+    let newDiv = document.createElement('div');
+    newDiv.innerText = loading[i]
+    div.appendChild(newDiv);
+  }
+}
 window.onload = async () => {
   await getToken();
   await loadGenres();
