@@ -247,8 +247,8 @@ async function buildQuestionObj(url, id) {
   const artistId = await getArtistId(id);
   const relatedArtists = await getRelatedArtist(artistId);
   const fiteredRelArtists = relatedArtists.filter(artist => artist.name && artist.images.length !== 0);
-  console.log('Lista de artistas relacionados: ',relatedArtists);
-  console.log('Lista filtrada de artistas relacionados: ',fiteredRelArtists);
+  // console.log('Lista de artistas relacionados: ',relatedArtists);
+  // console.log('Lista filtrada de artistas relacionados: ',fiteredRelArtists);
   const questionObj = {
     songURL: url,
     artist1: { ...await getTrackArtistImg(id), isRightAnswer: true },//indicador de resposta certa
@@ -301,13 +301,27 @@ async function selectRandomSongs(songs, number) {
 //   return shuffledSongs.slice(0, number);
 // }
 
-function updatePoints(isRight) {
-  if(isRight) {
+function showAnswerAndLoadNext(answerName, answerDiv) {
+  if (answerName === questionsList[qNum].artist1.name) {
+    qNum += 1;
+    answerDiv.style.border = '5px solid #00D18B';
     points += 200;
     pointsViewer.innerHTML = points;
+    setTimeout(() => {
+      loadQuestions(questionsList, qNum);
+      answerDiv.style.border = '';
+    }, 1500);
   } else {
+    qNum += 1;
+    answerDiv.style.border = '5px solid #CC0000';
+    correctAnswer.style.border = '5px solid #00D18B';
     points -= 100;
     pointsViewer.innerHTML = points;
+    setTimeout(() => {
+      loadQuestions(questionsList, qNum);
+      answerDiv.style.borderColor = '';
+      correctAnswer.style.border = '';
+    }, 1500);
   }
 }
 
@@ -320,29 +334,17 @@ async function checkAnswers(event) {
     }
   });
   const answerName = answer.querySelector('span').innerText;
-  if (answerName === questionsList[qNum].artist1.name) {
-    qNum += 1;
-    answer.style.border = '5px solid #00D18B';
-    setTimeout(() => {
-      loadQuestions(questionsList, qNum);
-      updatePoints(true);
-      answer.style.border = '';
-    }, 1500);
-  } else {
-    qNum += 1;
-    answer.style.border = '5px solid #CC0000';
-    correctAnswer.style.border = '5px solid #00D18B';
-    setTimeout(() => {
-      loadQuestions(questionsList, qNum);
-      updatePoints(false);
-      answer.style.borderColor = '';
-      correctAnswer.style.border = '';
-    }, 1500);
-  }
+  showAnswerAndLoadNext(answerName, answer);
+  
 }
 
 // Carrega música e imagens aleatoriamente
 const loadQuestions = (questions, num) => {
+  if (num === 5) {
+    if (!alert(`Pontuação final: ${points}`)){
+      window.location.reload();
+    }
+  };
   questionNumber.innerText = num + 1;
   audioTag.src = questions[num].songURL;
   const random = [1, 2, 3, 4].sort(() => 0.5 - Math.random());
@@ -388,6 +390,7 @@ function mkLoadpg() {
     div.appendChild(newDiv);
   }
 }
+
 window.onload = async () => {
   await getToken();
   await loadGenres();

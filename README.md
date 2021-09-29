@@ -1,6 +1,9 @@
-## Timeline
+### Bem vindo ao KAHOOTIFY
 
-1. Created [draft](https://www.figma.com/file/V7MZ3JN7Lsx5RYRuoQQRhe/Kahootify?node-id=0%3A1) with Figma;
-2. Created repository **Kahootify**;
-3. Created `index.html`, `script.js` and `style.css`;
-4. Run `npm init` and `npm install node-fetch@^2`;
+Projeto desenvolvido pelos alunos da Tribo 15 A da [Trybe](https://www.betrybe.com/)! 	:musical_score: :notes: ![Spotify](https://cdn.icon-icons.com/icons2/195/PNG/256/Spotify_23464.png | =100x100)
+
+Alunos:  
+* Carla Azevedo - [Github](https://github.com/CarlaAzevedo)
+* João Pedro Ortega  - [Github](https://github.com/Joao-Ortega)
+* Luan Vitor - [Github](https://github.com/LuanVittor)
+* Leonardo Felix - [Github](https://github.com/leonardodfelix)

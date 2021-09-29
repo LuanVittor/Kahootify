@@ -202,7 +202,6 @@ h5 {
 }
 
 /* Game Styles */
-
 #game-page {
   display: none;
   height: 100%;
@@ -211,7 +210,6 @@ h5 {
   top: 0;
   left: 0;
   background-color: var(--backgroundKahoot);
-  z-index: -1;
   font-family: 'Courgette', cursive;
 }
 
