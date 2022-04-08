@@ -222,7 +222,7 @@ async function buildQuestionObj(url, id) {
 
 async function buildGameQuestions(songs, ids) {
   const arrQuestionsObjs = [];
-  for (let index = 0; index < songs.length; index++) {
+  for (let index = 0; index < songs.length; index += 1) {
     const obj = await buildQuestionObj(songs[index], ids[index]);
     arrQuestionsObjs.push(obj);
     if (arrQuestionsObjs.length === 5) break;
@@ -249,7 +249,7 @@ async function selectRandomSongs(songs, number) {
   return shuffledSongs.slice(0, number);
 }
 
-// funcao que calcula os pontos com base no te
+// funcao que calcula os pontos com base no tempo
 const getPoints = async () => {
   points = 3000;
   const interval = setInterval(() => {
@@ -363,7 +363,7 @@ const loadQuestions = (questions, num) => {
       anotherRound.innerText = 'Que tal mais uma rodada? Desafie seus amigos';
       setTimeout(() => {
         window.location.reload();
-      }, 15000)
+      }, 5000)
       
     } else {
       mainGame.insertBefore(createAlert2(), mainGame.firstChild);
